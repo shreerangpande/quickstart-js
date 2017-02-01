@@ -83,6 +83,18 @@ limitations under the License.
 <!-- PASTE FIREBASE INITIALIZATION CODE HERE -->
 <!-- END INITIALIZATION CODE -->
 <!-- ******************************************************** -->
+<script src="https://www.gstatic.com/firebasejs/3.6.5/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyDcgwM2l9a96rLuo1eyeT3YlvkIEMljmdI",
+    authDomain: "fir-push-11270.firebaseapp.com",
+    databaseURL: "https://fir-push-11270.firebaseio.com",
+    storageBucket: "fir-push-11270.appspot.com",
+    messagingSenderId: "271667493647"
+  };
+  firebase.initializeApp(config);
+</script>
 <script>
   // [START get_messaging_object]
   // Retrieve Firebase Messaging object.
@@ -96,6 +108,7 @@ limitations under the License.
   // [START refresh_token]
   // Callback fired if Instance ID token is updated.
   messaging.onTokenRefresh(function() {
+    console.log('Reached here');
     messaging.getToken()
     .then(function(refreshedToken) {
       console.log('Token refreshed.');
@@ -113,7 +126,7 @@ limitations under the License.
       console.log('Unable to retrieve refreshed token ', err);
       showToken('Unable to retrieve refreshed token ', err);
     });
-  });
+  })
   // [END refresh_token]
 
   // [START receive_message]
@@ -121,24 +134,26 @@ limitations under the License.
   // - a message is received while the app has focus
   // - the user clicks on an app notification created by a sevice worker
   //   `messaging.setBackgroundMessageHandler` handler.
-  messaging.onMessage(function(payload) {
-    console.log("Message received. ", payload);
-    // [START_EXCLUDE]
-    // Update the UI to include the received message.
-    appendMessage(payload);
-    // [END_EXCLUDE]
-  });
+    messaging.onMessage(function(payload) {
+      console.log("Message received. ", payload);
+      // [START_EXCLUDE]
+      // Update the UI to include the received message.
+      appendMessage(payload);
+      // [END_EXCLUDE]
+    });
   // [END receive_message]
 
   function resetUI() {
     clearMessages();
     showToken('loading...');
+    console.log('loading');
     // [START get_token]
     // Get Instance ID token. Initially this makes a network call, once retrieved
     // subsequent calls to getToken will return from cache.
     messaging.getToken()
     .then(function(currentToken) {
       if (currentToken) {
+        console.log(currentToken);
         sendTokenToServer(currentToken);
         updateUIForPushEnabled(currentToken);
       } else {
